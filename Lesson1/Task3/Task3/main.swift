@@ -17,7 +17,7 @@ var annualPercent: Double = Double(readLine() ?? "0") ?? Double(0)
 
 // Если произошла ошибка интерпретирования в Double или пользователь ввёл число < 0
 //	то выходим
-if deposAmount == 0 || annualPercent == 0 {
+if deposAmount <= 0 || annualPercent <= 0 {
 	print("Сумма вклада или годовой процента должны быть больше нуля!")
 	exit(0)
 }
