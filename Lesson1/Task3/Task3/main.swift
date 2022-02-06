@@ -9,11 +9,11 @@ import Foundation
 
 // Запрос и пользовательский ввод числа с последующим интерпретированием в Double
 print("Введите сумму вклада числом:")
-var deposAmount: Double = Double(readLine() ?? "0") ?? Double(0)
+let deposAmount: Double = Double(readLine() ?? "0") ?? Double(0)
 
 // Запрос и пользовательский ввод числа с последующим интерпретированием в Double
 print("Введите годовой процент вклада числом:")
-var annualPercent: Double = Double(readLine() ?? "0") ?? Double(0)
+let annualPercent: Double = Double(readLine() ?? "0") ?? Double(0)
 
 // Если произошла ошибка интерпретирования в Double или пользователь ввёл число < 0
 //	то выходим
