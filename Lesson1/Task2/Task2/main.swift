@@ -21,6 +21,9 @@ let perimeter: Double = sqrt(pow(aLeg, 2.0) + pow(bLeg, 2.0)) + aLeg + bLeg
 let hypotenuse: Double = sqrt(pow(aLeg, 2.0) + pow(bLeg, 2.0))
 
 // Выводим результат
-print(String(format: "У прямоугольного треугольника с катетами a = %.3f и b = %.3f \n"
-			 + "Площадь = %.3f\nПериметр = %.3f\nГипотенуза = %.3f",
-			 aLeg, bLeg, square, perimeter, hypotenuse))
+let resultMessage: String
+resultMessage = String(format: "У прямоугольного треугольника с катетами a = %.3f и b = %.3f \n"
+				 + "Площадь = %.3f\nПериметр = %.3f\nГипотенуза = %.3f"
+				 , aLeg, bLeg, square, perimeter, hypotenuse)
+
+print(resultMessage)
