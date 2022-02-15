@@ -174,7 +174,7 @@ func generatePrimeNumbers() -> [Int] {
 			} else {
 				iterator += 1
 			}
-
+			
 		}
 
 	}
