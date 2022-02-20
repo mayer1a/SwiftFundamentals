@@ -46,10 +46,10 @@ protocol CarProtocol {
 	mutating func closeDoor()
 
 	/// Включение огней автомобиля
-	mutating func turnOnLights()
+	mutating func turnOnLights(what lights: String)
 
 	/// Выключение огней автомобиля
-	mutating func turnOffLights()
+	mutating func turnOffLights(what lights: String)
 
 	/// Открытие капота
 	mutating func openBonnet()
@@ -74,42 +74,52 @@ extension CarProtocol {
 
 	mutating func startEngine() {
 		isEngineRunning = true
+		print("\(fullCarName): Двигатель запущен")
 	}
 
 	mutating func stopEngine() {
 		isEngineRunning = false
+		print("\(fullCarName): Двигатель остановлен")
 	}
 
 	mutating func openWindow() {
 		isWindowOpen = true
+		print("\(fullCarName): Окно открыто")
 	}
 
 	mutating func closeWindow() {
 		isWindowOpen = false
+		print("\(fullCarName): Окно закрыто")
 	}
 
 	mutating func openDoor() {
 		isDoorOpen = true
+		print("\(fullCarName): Дверь открыта")
 	}
 
 	mutating func closeDoor() {
 		isDoorOpen = false
+		print("\(fullCarName): Дверь закрыта")
 	}
 
-	mutating func turnOnLights() {
+	mutating func turnOnLights(what lights: String) {
 		isLightsOn = true
+		print("\(fullCarName): Включены \(lights) огни")
 	}
 
-	mutating func turnOffLights() {
+	mutating func turnOffLights(what lights: String) {
 		isLightsOn = false
+		print("\(fullCarName): Выключены \(lights) огни")
 	}
 
 	mutating func openBonnet() {
 		isBonnetOpen = true
+		print("\(fullCarName): Капот открыт")
 	}
 
 	mutating func closeBonnet() {
 		isBonnetOpen = false
+		print("\(fullCarName): Капот закрыт")
 	}
 
 	func about() {
@@ -238,6 +248,18 @@ final class SportCar: CarProtocol {
 		}
 	}
 
+	/// Установка спойлера
+	func installSpoiler() {
+		isSpoilerInstalled = true
+		print("\(fullCarName): Спойлер установлен!")
+	}
+
+	/// Снятие спойлера
+	func uninstallSpoiler() {
+		isSpoilerInstalled = false
+		print("\(fullCarName): Спойлер снят!")
+	}
+
 	func about() {
 		print("""
 		------------------------------------------------------------
@@ -276,10 +298,77 @@ extension SportCar: CustomStringConvertible {
 
 // MARK: - Класс TrunkCar, имплементирующий протокол Car с описаниями индивидуальных свойств
 
+final class TrunkCar: CarProtocol {
+	var brand: String
+	var model: String
+	var engineType: String
+	var transmission: String
+	var manufactureYear: UInt
+	var carMileage: UInt
+	var horsePower: UInt
+	var fuelAmount: Double
+	var isEngineRunning: Bool
+	var isWindowOpen: Bool
+	var isDoorOpen: Bool
+	var isLightsOn: Bool
+	var isBonnetOpen: Bool
+
+	private let bodyLength: Double
+	private let bodyCapacity: Double
+	private let carrying: Double
+	private var isBodyLowered: Bool
+	private var isFlashersOn: Bool
+	private var isTrailerHitched: Bool
+	private var isCargoHandling: Bool
+
+	init(brand: String,
+		 model: String,
+		 engineType: String,
+		 transmission: String,
+		 manufactureYear: UInt,
+		 carMileage: UInt,
+		 horsePower: UInt,
+		 fuelAmount: Double,
+		 isEngineRunning: Bool = false,
+		 isWindowOpen: Bool = false,
+		 isDoorOpen: Bool = false,
+		 isLightsOn: Bool = false,
+		 isBonnetOpen: Bool = false,
+		 bodyLength: Double,
+		 bodyCapacity: Double,
+		 carrying: Double,
+		 isBodyLowered: Bool = false,
+		 isFlashersOn: Bool = false,
+		 isTrailerHitched: Bool = false,
+		 isCargoHandling: Bool = false)
+	{
+		self.brand = brand
+		self.model = model
+		self.engineType = engineType
+		self.transmission = transmission
+		self.manufactureYear = manufactureYear
+		self.carMileage = carMileage
+		self.horsePower = horsePower
+		self.fuelAmount = fuelAmount
+		self.isEngineRunning = isEngineRunning
+		self.isWindowOpen = isWindowOpen
+		self.isDoorOpen = isDoorOpen
+		self.isLightsOn = isLightsOn
+		self.isBonnetOpen = isBonnetOpen
+		self.bodyLength = bodyLength
+		self.bodyCapacity = bodyCapacity
+		self.carrying = carrying
+		self.isBodyLowered = isBodyLowered
+		self.isFlashersOn = isFlashersOn
+		self.isTrailerHitched = isTrailerHitched
+		self.isCargoHandling = isCargoHandling
+	}
+}
+
 
 // MARK: - Создание экземпляров легковых и грузовых автомобилей разными инициализаторами
 
-let audiR8 = SportCar(brand: "Audi",
+var audiR8 = SportCar(brand: "Audi",
 					  model: "R8",
 					  engineType: "Gasoline",
 					  transmission: "Automatic",
@@ -289,7 +378,7 @@ let audiR8 = SportCar(brand: "Audi",
 					  fuelAmount: 230,
 					  trunkCapacity: 150)
 
-let mercedesBenzE350 = SportCar(brand: "Mercedes Benz",
+var mercedesBenzE350 = SportCar(brand: "Mercedes Benz",
 							   model: "E350",
 							   engineType: "Gasoline",
 							   transmission: "Automatic",
@@ -316,9 +405,14 @@ audiR8.about()
 mercedesBenzE350.about()
 
 
+// MARK: - Демонстрация работы функций автомобиля
+
+audiR8.turnOnLights(what: "передние")
+
+print("------------------------------------------------------------")
+
+
 // MARK: - Демонстрация работы расширения класса имплементирующего протокол CustomStringConvertible
 
 print(audiR8)
 print(mercedesBenzE350)
-
-
