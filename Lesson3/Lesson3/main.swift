@@ -37,7 +37,7 @@ enum CarActions {
 /// Метод, который проверит остаток свободного места в багажнике при его заполнении.
 /// Метод для изменения состояний автомобиля
 struct SportCar {
-
+	
 	var brand: String
 	let model: String
 	let engineType: String
@@ -55,13 +55,11 @@ struct SportCar {
 	var isTrunkOpen: Bool
 	var	isBonnetOpen: Bool
 	var isGasTankEmpty: Bool
-
+	
 	var	fullCarName: String {
-		get	{
-			return "\(brand) \(model)"
-		}
+		return "\(brand) \(model)"
 	}
-
+	
 	/// Инициализация структуры легкового автомобиля.
 	/// Булевые аргументы, вместимость багажника и занятое пространство в багажнике можно опустить при инициализаии
 	init(brand: String,
@@ -100,14 +98,14 @@ struct SportCar {
 		self.isBonnetOpen = isBonnetOpen
 		self.isGasTankEmpty = isGasTankEmpty
 	}
-
+	
 	/**
 	 Метод для изменения состояния автомобиля с выводом сообщения о совершенном действии
-
+	 
 	 - Returns: Void
-
+	 
 	 - Parameter is: Действие с автомобилем. Для некоторых действий необходимо отправить String внутри действия
-
+	 
 	 */
 	mutating func carAction(is action: CarActions) {
 		switch action {
@@ -151,14 +149,14 @@ struct SportCar {
 			print("\(fullCarName): Багажник закрыт!")
 		}
 	}
-
+	
 	/**
 	 Метод для вывода подрбной информации об автомобиле
-
+	 
 	 - Returns: Void
 	 */
 	mutating func about() {
-
+		
 		print("""
   ------------------------------------------------------------
   Подробная информация легкового автомобиля \(fullCarName):
@@ -181,16 +179,16 @@ struct SportCar {
   ------------------------------------------------------------
   """)
 	}
-
+	
 	/**
 	 Метод для подсчёта оставшегося свободного места в багажнике
-
+	 
 	 - Returns: Свободное место в багажнике - Double
 	 */
 	func calculateFreeSpace() -> Double {
 		return trunkCapacity > 0 ? trunkCapacity - spaceOccupied : 0
 	}
-
+	
 }
 
 
@@ -218,31 +216,29 @@ struct TrunkCar {
 	let bodyLength: Double
 	let bodyCapacity: Double
 	let horsePower: UInt
-
+	
 	/// Грузоподъёмность
 	let carrying: Double
 	private var isTrailerHitched: Bool
 	private var isCargoHandling: Bool
-
+	
 	var	fullTrunkName: String {
-		get	{
-			return "\(brand) \(model)"
-		}
+		return "\(brand) \(model)"
 	}
-
+	
 	private var spaceOccupied: Double = 0 {
-
+		
 		willSet(newValue) {
 			print("\(fullTrunkName): Попытка загрузки \(newValue) тонн.")
 		}
 		didSet(oldValue) {
 			print("""
-	\(fullTrunkName): К \(oldValue) тонн груза добавлено \(spaceOccupied - oldValue).
-	 Осталось места на \(bodyCapacity - spaceOccupied) тонн.
-	""")
+ \(fullTrunkName): К \(oldValue) тонн груза добавлено \(spaceOccupied - oldValue).
+  Осталось места на \(bodyCapacity - spaceOccupied) тонн.
+ """)
 		}
 	}
-
+	
 	/// Инициализация структуры грузового автомобиля.
 	/// Булевые аргументы можно опустить при инициализаии
 	init(brand: String,
@@ -263,17 +259,17 @@ struct TrunkCar {
 		self.isTrailerHitched = isTrailerHitched
 		self.isCargoHandling = isLoadingProgress
 	}
-
+	
 	/**
 	 Метод для изменения состояния грузовика с выводом сообщения о совершенном действии
-
+	 
 	 - Returns: Void
-
+	 
 	 - Parameter is: Действие с грузовиком. Для некоторых действий необходимо отправить Double внутри действия
-
+	 
 	 */
 	mutating func cargoAction(action: TrunkAction) {
-
+		
 		switch action {
 		case .loading(let cargoTons) where isTrailerHitched && isCargoHandling:
 			if cargoTons > bodyCapacity - spaceOccupied {
@@ -299,10 +295,10 @@ struct TrunkCar {
 			print("\(fullTrunkName): Трейлер отцеплен от грузовика")
 		}
 	}
-
+	
 	/**
 	 Метод для запуска процесса погрузки/роазгрузки
-
+	 
 	 - Returns: Void
 	 */
 	mutating func startCargoHandling() {
@@ -313,10 +309,10 @@ struct TrunkCar {
 			print("\(fullTrunkName): Процесс погрузки/разгрузки запущен")
 		}
 	}
-
+	
 	/**
 	 Метод для остановки процесса погрузки/роазгрузки
-
+	 
 	 - Returns: Void
 	 */
 	mutating func stopCargoHandling() {
@@ -327,14 +323,14 @@ struct TrunkCar {
 			print("\(fullTrunkName): Процесс погрузки/разгрузки уже остановлен")
 		}
 	}
-
+	
 	/**
 	 Метод для вывода подрбной информации о грузовике
-
+	 
 	 - Returns: Void
 	 */
 	mutating func about() {
-
+		
 		print("""
    ------------------------------------------------------------
    Подробная информация грузового автомобиля \(fullTrunkName):
