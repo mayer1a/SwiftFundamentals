@@ -125,7 +125,7 @@ extension CarProtocol {
 	func about() {
 		print("""
 		------------------------------------------------------------
-		Подробная информация легкового автомобиля \(fullCarName):
+		Подробная информация автомобиля \(fullCarName):
 		------------------------------------------------------------
 		Тип двигателя: \(engineType)
 		Тип трансмиссии: \(transmission)
@@ -147,6 +147,7 @@ extension CarProtocol {
 // MARK: - Класс SportCar, имплементирующий протокол Car с описаниями индивидуальных свойств
 
 final class SportCar: CarProtocol {
+	// Общие свойства любого автомобиля
 	let brand: String
 	let model: String
 	let engineType: String
@@ -161,6 +162,7 @@ final class SportCar: CarProtocol {
 	var isLightsOn: Bool
 	var isBonnetOpen: Bool
 
+	// Индивидуальные свойства легкового автомобиля
 	private let trunkCapacity: Double
 	private var spaceOccupied: Double
 	private let isThereThirdRowSeats: Bool
@@ -213,38 +215,34 @@ final class SportCar: CarProtocol {
 		self.isRoofOpen = isRoofOpen
 	}
 
-	/// Метод упаковки багажа
+	/// Загрузка багажа
 	func putBaggage(liters baggage: Double) {
 
 		if spaceOccupied + baggage <= trunkCapacity {
+			print("\(fullCarName): К \(spaceOccupied) литров объёма багажа добавлено \(baggage).", terminator: " ")
+
 			spaceOccupied += baggage
 
-			print("""
-			\(fullCarName): К \(spaceOccupied) литров объёма багажа добавлено \(baggage).
-			Осталось места на \(trunkCapacity - spaceOccupied) литров багажа.
-			""")
+			print("Осталось места на \(trunkCapacity - spaceOccupied) литров багажа")
 		} else {
 			print("""
 			\(fullCarName): Загрузка \(baggage) литров багажа невозможна -
-			превышается максимальная вместимость багажника \(trunkCapacity).
+			превышается максимальная вместимость багажника \(trunkCapacity)
 			""")
 		}
 	}
 
-	/// Метод изъятия багажа
+	/// Разгрузка багажа
 	func takeBaggage(liters baggage: Double) {
 
 		if spaceOccupied - baggage < 0 {
+			print("\(fullCarName): Из \(spaceOccupied) литров объёма багажа взято \(baggage).", terminator: " ")
+
 			spaceOccupied -= baggage
 
-			print("""
-			\(fullCarName): Из \(spaceOccupied) литров объёма багажа взято \(baggage).
-			Осталось \(trunkCapacity - spaceOccupied) литров багажа.
-			""")
+			print("Осталось \(trunkCapacity - spaceOccupied) литров багажа")
 		} else {
-			print("""
-			\(fullCarName): Невозможно взять багажа больше, чем имеется в багажнике (\(baggage))
-			""")
+			print("\(fullCarName): Невозможно взять багажа больше, чем имеется в багажнике (\(baggage))")
 		}
 	}
 
@@ -288,7 +286,9 @@ final class SportCar: CarProtocol {
 	}
 }
 
+
 // MARK: - Расширение класса SportCar имплементирующий протокол CustomStringConvertible
+
 extension SportCar: CustomStringConvertible {
 	var description: String {
 		return "\(fullCarName) - экземпляр класса легкового автомобиля (SportCar)"
@@ -299,13 +299,14 @@ extension SportCar: CustomStringConvertible {
 // MARK: - Класс TrunkCar, имплементирующий протокол Car с описаниями индивидуальных свойств
 
 final class TrunkCar: CarProtocol {
-	var brand: String
-	var model: String
-	var engineType: String
-	var transmission: String
-	var manufactureYear: UInt
+	// Общие свойства для любого автомобиля
+	let brand: String
+	let model: String
+	let engineType: String
+	let transmission: String
+	let manufactureYear: UInt
 	var carMileage: UInt
-	var horsePower: UInt
+	let horsePower: UInt
 	var fuelAmount: Double
 	var isEngineRunning: Bool
 	var isWindowOpen: Bool
@@ -313,6 +314,8 @@ final class TrunkCar: CarProtocol {
 	var isLightsOn: Bool
 	var isBonnetOpen: Bool
 
+	// Индивидуальные свойства грузового автомобиля
+	private var spaceOccupied: Double
 	private let bodyLength: Double
 	private let bodyCapacity: Double
 	private let carrying: Double
@@ -337,6 +340,7 @@ final class TrunkCar: CarProtocol {
 		 bodyLength: Double,
 		 bodyCapacity: Double,
 		 carrying: Double,
+		 spaceOccupied: Double = 0,
 		 isBodyLowered: Bool = false,
 		 isFlashersOn: Bool = false,
 		 isTrailerHitched: Bool = false,
@@ -358,10 +362,101 @@ final class TrunkCar: CarProtocol {
 		self.bodyLength = bodyLength
 		self.bodyCapacity = bodyCapacity
 		self.carrying = carrying
+		self.spaceOccupied = spaceOccupied
 		self.isBodyLowered = isBodyLowered
 		self.isFlashersOn = isFlashersOn
 		self.isTrailerHitched = isTrailerHitched
 		self.isCargoHandling = isCargoHandling
+	}
+
+	/// Загрузка груза
+	func putCargo(tons cargo: Double) {
+
+		if spaceOccupied + cargo <= bodyCapacity {
+			print("\(fullCarName): К \(spaceOccupied) тонн груза загружено \(cargo).", terminator: " ")
+
+			spaceOccupied += cargo
+
+			print("Осталось места на \(bodyCapacity - spaceOccupied) тонн груза")
+		} else {
+			print("""
+			\(fullCarName): Загрузка \(cargo) тонн груза невозможна -
+			превышается максимальная вместимость кузова \(bodyCapacity)
+			""")
+		}
+	}
+
+	/// Разгрузка груза
+	func takeCargo(tons cargo: Double) {
+
+		if spaceOccupied - cargo >= 0 {
+			print("\(fullCarName): Из \(spaceOccupied) тонн груза выгружено \(cargo).", terminator: " ")
+
+			spaceOccupied -= cargo
+
+			print("Осталось \(spaceOccupied) тонн груза")
+		} else {
+			print("\(fullCarName): Невозможно выгрузить груза больше, чем имеется в кузове (\(cargo))")
+		}
+	}
+
+	/// Сцепка с кузовом
+	func startCargoHandling() {
+		if isCargoHandling {
+			print("\(fullCarName): Процесс погрузки/разгрузки уже запущен")
+		} else {
+			isCargoHandling = true
+			print("\(fullCarName): Процесс погрузки/разгрузки запущен")
+		}
+	}
+
+	/// Расцепка с кузовом
+	func stopCargoHandling() {
+		if isCargoHandling {
+			isCargoHandling = false
+			print("\(fullCarName): Процесс погрузки/разгрузки остановлен")
+		} else {
+			print("\(fullCarName): Процесс погрузки/разгрузки уже остановлен")
+		}
+	}
+
+
+	func about() {
+
+		print("""
+		------------------------------------------------------------
+		Подробная информация о грузовом автомобиле \(fullCarName):
+		------------------------------------------------------------
+		Тип двигателя: \(engineType)
+		Тип трансмиссии: \(transmission)
+		Год производства: \(manufactureYear)
+		Пробег в км.: \(carMileage)
+		Объём топлива в бензобаке в л.: \(fuelAmount)
+		Мощность двигателя в л. с.: \(horsePower)
+		Длина кузова м.: \(bodyLength)
+		Вместимость кузова в т.: \(bodyCapacity)
+		Занятое место в кузове в т.: \(spaceOccupied)
+		Грузоподъёмность в т.: \(carrying)
+		Двигатель запущен - \(isEngineRunning)
+		Окно открыто - \(isWindowOpen)
+		Дверь открыта - \(isDoorOpen)
+		Габаритные огни включены - \(isLightsOn)
+		Капот открыт - \(isBonnetOpen)
+		Кузов опущен - \(isBodyLowered)
+		Мигалки включены - \(isFlashersOn)
+		Трейлер прицеплен - \(isTrailerHitched)
+		Процесс погрузки/разгрузки запущен - \(isCargoHandling)
+		------------------------------------------------------------
+		""")
+	}
+}
+
+
+// MARK: - Расширение класса TrunkCar имплементирующий протокол CustomStringConvertible
+
+extension TrunkCar: CustomStringConvertible {
+	var description: String {
+		return "\(fullCarName) - экземпляр класса грузового автомобиля (TrunkCar)"
 	}
 }
 
@@ -379,35 +474,92 @@ var audiR8 = SportCar(brand: "Audi",
 					  trunkCapacity: 150)
 
 var mercedesBenzE350 = SportCar(brand: "Mercedes Benz",
-							   model: "E350",
-							   engineType: "Gasoline",
-							   transmission: "Automatic",
-							   manufactureYear: 2022,
-							   carMileage: 0,
-							   horsePower: 760,
-							   fuelAmount: 140,
-							   isEngineRunning: false,
-							   isWindowOpen: false,
-							   isDoorOpen: false,
-							   isLightsOn: true,
-							   isBonnetOpen: false,
-							   trunkCapacity: 120,
-							   spaceOccupied: 0.34,
-							   isThereThirdRowSeats: false,
-							   isSpoilerInstalled: true,
-							   isAutopilotOn: false,
-							   isTrunkOpen: false,
-							   isRoofOpen: false)
+								model: "E350",
+								engineType: "Gasoline",
+								transmission: "Automatic",
+								manufactureYear: 2022,
+								carMileage: 0,
+								horsePower: 760,
+								fuelAmount: 140,
+								isEngineRunning: false,
+								isWindowOpen: false,
+								isDoorOpen: false,
+								isLightsOn: true,
+								isBonnetOpen: false,
+								trunkCapacity: 120,
+								spaceOccupied: 0.34,
+								isThereThirdRowSeats: false,
+								isSpoilerInstalled: true,
+								isAutopilotOn: false,
+								isTrunkOpen: false,
+								isRoofOpen: false)
+
+var volvoF90 = TrunkCar(brand: "Volvo",
+						model: "F90",
+						engineType: "Diesel",
+						transmission: "Manual",
+						manufactureYear: 2017,
+						carMileage: 364000,
+						horsePower: 850,
+						fuelAmount: 600,
+						bodyLength: 13,
+						bodyCapacity: 90,
+						carrying: 150)
+
+var	daimlerTruck = TrunkCar(brand: "Daimler",
+							model: "Truck",
+							engineType: "Electrical",
+							transmission: "Robotic",
+							manufactureYear: 2021,
+							carMileage: 90365,
+							horsePower: 580,
+							fuelAmount: 670,
+							isEngineRunning: false,
+							isWindowOpen: false,
+							isDoorOpen: true,
+							isLightsOn: true,
+							isBonnetOpen: false,
+							bodyLength: 8,
+							bodyCapacity: 20,
+							carrying: 30,
+							isBodyLowered: true,
+							isFlashersOn: false,
+							isTrailerHitched: true,
+							isCargoHandling: false)
+
 
 // MARK: - Вызов метода about каждой машины
 
 audiR8.about()
 mercedesBenzE350.about()
 
+volvoF90.about()
+daimlerTruck.about()
+
 
 // MARK: - Демонстрация работы функций автомобиля
 
+audiR8.carMileage += 10
+audiR8.startEngine()
+audiR8.putBaggage(liters: 35.89)
 audiR8.turnOnLights(what: "передние")
+
+mercedesBenzE350.openWindow()
+mercedesBenzE350.openDoor()
+mercedesBenzE350.openBonnet()
+mercedesBenzE350.startEngine()
+mercedesBenzE350.installSpoiler()
+mercedesBenzE350.uninstallSpoiler()
+
+volvoF90.startEngine()
+volvoF90.startCargoHandling()
+volvoF90.putCargo(tons: 20)
+volvoF90.takeCargo(tons: 13.42)
+volvoF90.stopCargoHandling()
+volvoF90.stopEngine()
+
+daimlerTruck.turnOnLights(what: "передние и задние габаритные")
+daimlerTruck.turnOffLights(what: "передние и задние габаритные")
 
 print("------------------------------------------------------------")
 
@@ -416,3 +568,5 @@ print("------------------------------------------------------------")
 
 print(audiR8)
 print(mercedesBenzE350)
+print(volvoF90)
+print(daimlerTruck)
