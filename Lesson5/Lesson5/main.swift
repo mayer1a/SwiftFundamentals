@@ -506,7 +506,7 @@ var volvoF90 = TrunkCar(brand: "Volvo",
                         bodyCapacity: 90,
                         carrying: 150)
 
-var	daimlerTruck = TrunkCar(brand: "Daimler",
+var daimlerTruck = TrunkCar(brand: "Daimler",
                             model: "Truck",
                             engineType: "Electrical",
                             transmission: "Robotic",
