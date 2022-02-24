@@ -28,7 +28,7 @@ enum Position {
 
 // MARK: - Queue
 
-struct Queue<T> {
+struct Queue<T: Equatable> {
     
     // MARK: - Приватные свойства
     
