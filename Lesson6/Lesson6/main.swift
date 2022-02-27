@@ -12,14 +12,14 @@ import Foundation
 
 enum QueueError: Error {
     
-    /// Пустая очередь
-    case emtyQueue
+    /// Empty queue
+    case errorEmtyQueue
 }
 
 
 // MARK: - Position
 
-/// Выбрать позицию элемента для сабскрипта
+/// Select element position for subscript
 enum Position {
     case first
     case last
@@ -28,26 +28,37 @@ enum Position {
 
 // MARK: - Queue
 
-struct Queue<T> {
+struct Queue<T: Equatable> {
     
-    // MARK: - Приватные свойства
+    // MARK: - Private property
     
     private var elements = [T]()
     
-    
-    // MARK: - Инициализатор
+
+    // MARK: - Public computed property
+
+    /// Queue size
+    var size: Int {
+        return elements.count
+    }
+
+    /// Is the queue empty
+    var isEmpty: Bool {
+        return elements.isEmpty
+    }
+
+
+    // MARK: - Init
     
     init(_ elements: [T]) {
         self.elements = elements
     }
     
     
-    // MARK: - Сабскрипты
+    // MARK: - Subscripts
     
     internal subscript(index: Int) -> T? {
-        guard index < elements.count, index >= 0 else {
-            return nil
-        }
+        guard index < elements.count, index >= 0 else { return nil }
         
         return elements[elements.count - index - 1]
     }
@@ -60,46 +71,33 @@ struct Queue<T> {
             return elements[0]
         }
     }
+
+
+    // MARK: - Public methods
     
-    // MARK: - Публичные методы
-    
-    /// Показать пустая ли очередь
-    func isEmpty() -> Bool {
-        return elements.isEmpty
-    }
-    
-    /// Добавить элемент в конец очереди
+    /// Add an element to the end of the queue
     mutating func enqueue(_ element: T) {
         elements.insert(element, at: elements.startIndex)
     }
     
-    /// Получить и удалить первый элемент из очереди
+    /// Get and remove the first element from the queue
     mutating func dequeue() throws -> T {
-        guard let lastElement = elements.popLast() else {
-            throw QueueError.emtyQueue
-        }
+        guard let lastElement = elements.popLast() else { throw QueueError.errorEmtyQueue }
         
         return lastElement
     }
     
-    /// Получить первый элемент в очереди (без удаления)
+    /// Get the first element in the queue (no removal)
     func peek() throws -> T {
-        guard let lastElement = elements.last else {
-            throw QueueError.emtyQueue
-        }
+        guard let lastElement = elements.last else { throw QueueError.errorEmtyQueue }
         
         return lastElement
     }
     
-    /// Размер очереди
-    func size() -> Int {
-        return elements.count
-    }
     
+    // MARK: - Hiegher order functions
     
-    // MARK: - Функции высшего порядка
-    
-    /// Получить новую очередь согласно принимаемой функции
+    /// Get a new queue according to the received function
     func evenFilter(_ includeElement: (T) -> Bool) -> [T] {
         var returnElements = [T]()
         
@@ -110,12 +108,12 @@ struct Queue<T> {
         return returnElements
     }
     
-    /// Преобразовать значения согласно принимаемой функции
+    /// Convert values according to the received function
     func map(_ includeElement: (T) -> T) -> [T] {
         var returnElements = [T]()
-        
-        for element in elements {
-            returnElements.append(includeElement(element))
+
+        elements.forEach {
+            returnElements.append(includeElement($0))
         }
         
         return returnElements
@@ -133,7 +131,7 @@ extension Queue: CustomStringConvertible {
 }
 
 
-// MARK: - Демонстрация работы с числами
+// MARK: - Demonstration of working with numbers
 
 var numberQueue = Queue([Int]())
 
@@ -141,7 +139,7 @@ for number in 0...20 {
     numberQueue.enqueue(number)
 }
 
-print("Очередь элементов до извлечения размером = \(numberQueue.size()): \(numberQueue)")
+print("Очередь элементов до извлечения размером = \(numberQueue.size): \(numberQueue)")
 print("------------------------------------------------------------")
 
 do {
@@ -151,12 +149,12 @@ do {
         try print("\t\tТеперь первый элемент в очереди - \"\(numberQueue.peek())\"")
     }
     
-} catch QueueError.emtyQueue {
+} catch QueueError.errorEmtyQueue {
     print("Ошибка! Очередь пуста, нечего извлекать или просматривать.")
 }
 
 print("------------------------------------------------------------")
-print("Очередь элементов после извлечения размером = \(numberQueue.size()): \(numberQueue)")
+print("Очередь элементов после извлечения размером = \(numberQueue.size): \(numberQueue)")
 
 print("Обращение по сабскрипту:", terminator: " ")
 print("первый элемент очереди = \(numberQueue[Position.first]),", terminator: " ")
@@ -172,7 +170,7 @@ print("Очередь, кратная 9, размером = \(multipleNineQueue.
 print("------------------------------------------------------------\n")
 
 
-// MARK: - Демонстрация работы со строками
+// MARK: - Demonstration of working with strings
 
 var flavorsQueue = Queue([String]())
 
@@ -182,7 +180,7 @@ for flavor in flavors {
     flavorsQueue.enqueue(flavor)
 }
 
-print("Очередь элементов до извлечения размером = \(flavorsQueue.size()): \(flavorsQueue)")
+print("Очередь элементов до извлечения размером = \(flavorsQueue.size): \(flavorsQueue)")
 print("------------------------------------------------------------")
 
 do {
@@ -192,12 +190,12 @@ do {
         try print("\t\tТеперь первый элемент в очереди - \"\(flavorsQueue.peek())\"")
     }
     
-} catch QueueError.emtyQueue {
+} catch QueueError.errorEmtyQueue {
     print("Ошибка! Очередь пуста, нечего извлекать или просматривать.")
 }
 
 print("------------------------------------------------------------")
-print("Очередь элементов после извлечения размером = \(flavorsQueue.size()): \(flavorsQueue)")
+print("Очередь элементов после извлечения размером = \(flavorsQueue.size): \(flavorsQueue)")
 
 print("Обращение по сабскрипту:", terminator: " ")
 print("первый элемент очереди = \(flavorsQueue[Position.first]),", terminator: " ")
@@ -219,3 +217,4 @@ print("Очередь элементов, начинающихся с буквы
 print("------------------------------------------------------------")
 
 print("Элемент №2: \(flavorsQueue[1] ?? "Ошибка! Выход за границы очереди")")
+
