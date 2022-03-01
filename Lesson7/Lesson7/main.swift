@@ -9,7 +9,7 @@ import Foundation
 
 
 // MARK: - Error
-enum purchaseError: Error {
+enum PurchaseError: Error {
     case errorInvalidName
     case errorNotEnoughMoney
     case errorQuantityCar
@@ -18,7 +18,7 @@ enum purchaseError: Error {
 
 
 // MARK: - LocalizedError
-extension purchaseError: LocalizedError {
+extension PurchaseError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .errorInvalidName:
@@ -248,13 +248,13 @@ final class CarShowroom {
     /// Purchase of a truck
     func purchaseTruckCar(carName: String) throws -> TruckCar {
 
-        guard let car = garage[carName] else { throw purchaseError.errorInvalidName }
+        guard let car = garage[carName] else { throw PurchaseError.errorInvalidName }
 
-        guard car.count > 0 else { throw purchaseError.errorQuantityCar }
+        guard car.count > 0 else { throw PurchaseError.errorQuantityCar }
 
-        guard car.price <= coinDeposit else { throw purchaseError.errorNotEnoughMoney }
+        guard car.price <= coinDeposit else { throw PurchaseError.errorNotEnoughMoney }
 
-        guard let purchasedCar = car.truckCar else { throw purchaseError.errorInvalidType }
+        guard let purchasedCar = car.truckCar else { throw PurchaseError.errorInvalidType }
 
         var updateCar = car
         updateCar.count -= 1
@@ -369,12 +369,12 @@ do {
     let scaniaF80 = try carShowroom.purchaseTruckCar(carName: "Scania F80")
 
     print(scaniaF80)
-} catch purchaseError.errorInvalidName {
+} catch PurchaseError.errorInvalidName {
     print("Машина с указаным названием отсутствует в автосалоне")
-} catch purchaseError.errorNotEnoughMoney {
+} catch PurchaseError.errorNotEnoughMoney {
     print("Недостаточно денег для покупки")
-} catch purchaseError.errorQuantityCar {
+} catch PurchaseError.errorQuantityCar {
     print("Машины нет в наличии у диллера")
-} catch purchaseError.errorInvalidType {
+} catch PurchaseError.errorInvalidType {
     print("При покупке автомобиля выбран неверный метод типа автомобиля")
 }
