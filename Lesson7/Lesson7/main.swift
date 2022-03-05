@@ -249,11 +249,8 @@ final class CarShowroom {
     func purchaseTruckCar(carName: String) throws -> TruckCar {
 
         guard let car = garage[carName] else { throw PurchaseError.errorInvalidName }
-
         guard car.count > 0 else { throw PurchaseError.errorQuantityCar }
-
         guard car.price <= coinDeposit else { throw PurchaseError.errorNotEnoughMoney }
-
         guard let purchasedCar = car.truckCar else { throw PurchaseError.errorInvalidType }
 
         var updateCar = car
